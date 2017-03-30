@@ -21,7 +21,7 @@ class Config(object):
 		self.trainTimes = 3000
 		self.margin = 1.0
 
-class TransEModel(object):
+class TransRModel(object):
 
 	def __init__(self, config):
 
@@ -84,7 +84,7 @@ def main(_):
 		with sess.as_default():
 			initializer = tf.contrib.layers.xavier_initializer(uniform = False)
 			with tf.variable_scope("model", reuse=None, initializer = initializer):
-				trainModel = TransEModel(config = config)
+				trainModel = TransRModel(config = config)
 
 			global_step = tf.Variable(0, name="global_step", trainable=False)
 			optimizer = tf.train.AdamOptimizer(0.001)

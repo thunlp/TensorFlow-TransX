@@ -20,7 +20,7 @@ class Config(object):
 		self.trainTimes = 3000
 		self.margin = 1.0
 
-class TransEModel(object):
+class TransHModel(object):
 
 	def calc(self, e, n):
 		norm = tf.nn.l2_normalize(n, 1)
@@ -85,7 +85,7 @@ def main(_):
 		with sess.as_default():
 			initializer = tf.contrib.layers.xavier_initializer(uniform = False)
 			with tf.variable_scope("model", reuse=None, initializer = initializer):
-				trainModel = TransEModel(config = config)
+				trainModel = TransHModel(config = config)
 
 			global_step = tf.Variable(0, name="global_step", trainable=False)
 			optimizer = tf.train.GradientDescentOptimizer(0.001)

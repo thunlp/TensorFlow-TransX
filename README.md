@@ -1,6 +1,11 @@
 # TensorFlow-TransX
 
-The implementation of TransE [1], TransH [2], TransR [3], TransD [4] for knowledge representation learning (KRL). The overall framework is based on TensorFlow.
+The implementation of TransE [1], TransH [2], TransR [3], TransD [4] for knowledge representation learning (KRL). The overall framework is based on TensorFlow. We use C++ to implement some underlying operations such as data preprocessing and negative sampling. For each specific model, it is implemented by TensorFlow with Python interfaces so that there is a convenient platform to run models on GPUs. 
+
+
+# Customizing Your Own Model
+
+If you have a new idea and need to implement its code, you just need to change Python interfaces for your customized model. Read these codes, you will find that to change the class TransXModel will meet your needs.
 
 # Evaluation Results
 
