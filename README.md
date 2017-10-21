@@ -21,7 +21,7 @@ entity2id.txt: all entities and corresponding ids, one per line. The first line 
 
 relation2id.txt: all relations and corresponding ids, one per line. The first line is the number of relations.
 
-You can download FB15K from [[Download]](http://pan.baidu.com/s/1eRD9B4A), and the more datasets can also be found in ("https://github.com/thunlp/KB2E").
+You can download FB15K and WN18 from [[Download]](https://github.com/thunlp/Fast-TransX/tree/master/data), and the more datasets can also be found in ("https://github.com/thunlp/KB2E").
 
 # Compile
 
