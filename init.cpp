@@ -10,6 +10,15 @@ using namespace std;
 
 string inPath = "./data/";
 
+extern "C"
+void setInPath(char *path) {
+    int len = strlen(path);
+    inPath = "";
+    for (int i = 0; i < len; i++)
+        inPath = inPath + path[i];
+    printf("Input Files Path : %s\n", inPath.c_str());
+}
+
 int *lefHead, *rigHead;
 int *lefTail, *rigTail;
 
@@ -62,7 +71,7 @@ void init() {
 
 	freqEnt = (int *)calloc(entityTotal, sizeof(int));
 	
-	fin = fopen((inPath + "triple2id.txt").c_str(), "r");
+	fin = fopen((inPath + "train2id.txt").c_str(), "r");
 	tmp = fscanf(fin, "%d", &tripleTotal);
 	trainHead = (Triple *)calloc(tripleTotal, sizeof(Triple));
 	trainTail = (Triple *)calloc(tripleTotal, sizeof(Triple));
