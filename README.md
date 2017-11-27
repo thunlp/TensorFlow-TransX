@@ -28,7 +28,7 @@ You can download FB15K and WN18 from [[Download]](https://github.com/thunlp/Fast
 
 bash make.sh
 
-#Train
+# Train
 
 To train models based on random initialization:
 
@@ -60,7 +60,7 @@ To train models based on pretrained results:
 
 2. python transX.py
 
-#Test
+# Test
 
 To test your models:
 
