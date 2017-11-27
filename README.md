@@ -28,7 +28,56 @@ You can download FB15K and WN18 from [[Download]](https://github.com/thunlp/Fast
 
 bash make.sh
 
-python transX.py
+#Train
+
+To train models based on random initialization:
+
+1. Change class Config in transX.py
+
+		class Config(object):
+	
+			def __init__(self):
+				...
+				lib.setInPath("your training data path...")
+				self.testFlag = False
+				self.loadFromData = False
+				...
+
+2. python transX.py
+
+To train models based on pretrained results:
+
+1. Change class Config in transX.py
+
+		class Config(object):
+	
+			def __init__(self):
+				...
+				lib.setInPath("your training data path...")
+				self.testFlag = False
+				self.loadFromData = True
+				...
+
+2. python transX.py
+
+#Test
+
+To test your models:
+
+1. Change class Config in transX.py
+	
+		class Config(object):
+
+			def __init__(self):
+				...
+				test_lib.setInPath("your testing data path...")
+				self.testFlag = True
+				self.loadFromData = True
+				...
+
+2. python transX.py
+
+
 
 # Citation
 
