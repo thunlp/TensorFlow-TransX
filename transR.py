@@ -15,8 +15,9 @@ class Config(object):
 	def __init__(self):
 		lib.setInPath("./data/FB15K/")
 		test_lib.setInPath("./data/FB15K/")
-		self.testFlag = True
-		self.loadFromData = True
+		lib.setBernFlag(0)
+		self.testFlag = False
+		self.loadFromData = False
 		self.L1_flag = True
 		self.hidden_sizeE = 100
 		self.hidden_sizeR = 100

@@ -9,6 +9,7 @@
 using namespace std;
 
 string inPath = "./data/";
+int bernFlag = 0;
 
 extern "C"
 void setInPath(char *path) {
@@ -150,6 +151,11 @@ int getTripleTotal() {
 	return tripleTotal;
 }
 
+extern "C"
+void setBernFlag(int flag = 0) {
+	bernFlag = flag;
+};
+
 // unsigned long long *next_random;
 unsigned long long next_random = 3;
 
@@ -231,9 +237,14 @@ int corrupt_tail(int id, int t, int r) {
 
 extern "C"
 void getBatch(int *ph, int *pt, int *pr, int *nh, int *nt, int *nr, int batchSize, int id = 0) {
+	int i, j;
+	float prob;
 	for (int batch = 0; batch < batchSize; batch++) {
-		int i = rand_max(id, tripleTotal), j;
-		float prob = 1000 * right_mean[trainList[i].r] / (right_mean[trainList[i].r] + left_mean[trainList[i].r]);
+		i = rand_max(id, tripleTotal);
+		if (bernFlag)
+			prob = 1000 * right_mean[trainList[i].r] / (right_mean[trainList[i].r] + left_mean[trainList[i].r]);
+		else
+			prob = 500;
 		if (randd(id) % 1000 < prob) {
 			j = corrupt_head(id, trainList[i].h, trainList[i].r);
 			ph[batch] = trainList[i].h;

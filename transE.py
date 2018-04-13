@@ -15,14 +15,15 @@ class Config(object):
 	def __init__(self):
 		lib.setInPath("./data/FB15K/")
 		test_lib.setInPath("./data/FB15K/")
-		self.testFlag = True
-		self.loadFromData = True
+		lib.setBernFlag(0)
+		self.testFlag = False
+		self.loadFromData = False
 		self.L1_flag = True
-		self.hidden_size = 50
+		self.hidden_size = 100
 		self.nbatches = 100
 		self.entity = 0
 		self.relation = 0
-		self.trainTimes = 500
+		self.trainTimes = 1000
 		self.margin = 1.0
 
 class TransEModel(object):

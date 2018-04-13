@@ -25,9 +25,9 @@ void setInPath(char *path) {
 int relationTotal;
 int entityTotal;
 int testTotal, tripleTotal, trainTotal, validTotal;
-float l1_filter_tot = 0, l1_tot = 0, r1_tot = 0, r1_filter_tot = 0;
-float l3_filter_tot = 0, l3_tot = 0, r3_tot = 0, r3_filter_tot = 0;
-float l_filter_tot[6], r_filter_tot[6], l_tot[6], r_tot[6];
+float l1_filter_tot[6], r1_filter_tot[6], l1_tot[6], r1_tot[6];
+float l3_filter_tot[6], r3_filter_tot[6], l3_tot[6], r3_tot[6];
+float l10_filter_tot[6], r10_filter_tot[6], l10_tot[6], r10_tot[6];
 float l_filter_rank[6], r_filter_rank[6], l_rank[6], r_rank[6];
 
 
@@ -109,10 +109,20 @@ void init() {
     fclose(f_kb2);
     fclose(f_kb3);
     sort(tripleList, tripleList + tripleTotal, cmp_head());
-    memset(l_filter_tot, 0, sizeof(l_filter_tot));
-    memset(r_filter_tot, 0, sizeof(r_filter_tot));
-    memset(l_tot, 0, sizeof(l_tot));
-    memset(r_tot, 0, sizeof(r_tot));
+    
+    memset(l10_filter_tot, 0, sizeof(l10_filter_tot));
+    memset(r10_filter_tot, 0, sizeof(r10_filter_tot));
+    memset(l10_tot, 0, sizeof(l10_tot));
+    memset(r10_tot, 0, sizeof(r10_tot));
+    memset(l3_filter_tot, 0, sizeof(l3_filter_tot));
+    memset(r3_filter_tot, 0, sizeof(r3_filter_tot));
+    memset(l3_tot, 0, sizeof(l3_tot));
+    memset(r3_tot, 0, sizeof(r3_tot));
+    memset(l1_filter_tot, 0, sizeof(l1_filter_tot));
+    memset(r1_filter_tot, 0, sizeof(r1_filter_tot));
+    memset(l1_tot, 0, sizeof(l1_tot));
+    memset(r1_tot, 0, sizeof(r1_tot));
+
     int total_lef = 0;
     int total_rig = 0;
     FILE* f_type = fopen((inPath + "type_constrain.txt").c_str(),"r");
@@ -260,7 +270,7 @@ void testHead(float *con) {
     int l_filter_s_constrain = 0;
     int type_head = head_lef[r];
 
-    for (int j = 0; j <= entityTotal; j++) {
+    for (int j = 0; j < entityTotal; j++) {
         float value = con[j];
         if (j != h && value < minimal) {
             l_s += 1;
@@ -279,31 +289,37 @@ void testHead(float *con) {
         }
     }
 
-    if (l_filter_s < 10) l_filter_tot[0] += 1;
-    if (l_s < 10) l_tot[0] += 1;
-    if (l_filter_s < 3) l3_filter_tot += 1;
-    if (l_s < 3) l3_tot += 1;
-    if (l_filter_s < 1) l1_filter_tot += 1;
-    if (l_s < 1) l1_tot += 1;
-
-
-    if (l_filter_s < 10) l_filter_tot[label] += 1;
-    if (l_s < 10) l_tot[label] += 1;
-
     l_filter_rank[label] += l_filter_s;
     l_rank[label] += l_s;
-
-    if (l_filter_s_constrain < 10) l_filter_tot[5] += 1;
-    if (l_s_constrain < 10) l_tot[5] += 1;
-    
     l_filter_rank[5] += l_filter_s_constrain;
     l_rank[5] += l_s_constrain;
-
 	l_filter_rank[0] += (l_filter_s+1);
 	l_rank[0] += (1+l_s);
+
+    if (l_filter_s < 10) l10_filter_tot[0] += 1;
+    if (l_s < 10) l10_tot[0] += 1;
+    if (l_filter_s < 3) l3_filter_tot[0] += 1;
+    if (l_s < 3) l3_tot[0] += 1;
+    if (l_filter_s < 1) l1_filter_tot[0] += 1;
+    if (l_s < 1) l1_tot[0] += 1;
+
+    if (l_filter_s_constrain < 10) l10_filter_tot[5] += 1;
+    if (l_s_constrain < 10) l10_tot[5] += 1;
+    if (l_filter_s_constrain < 3) l3_filter_tot[5] += 1;
+    if (l_s_constrain < 3) l3_tot[5] += 1;
+    if (l_filter_s_constrain < 1) l1_filter_tot[5] += 1;
+    if (l_s_constrain < 1) l1_tot[5] += 1;
+
+    if (l_filter_s < 10) l10_filter_tot[label] += 1;
+    if (l_s < 10) l10_tot[label] += 1;
+    if (l_filter_s < 3) l3_filter_tot[label] += 1;
+    if (l_s < 3) l3_tot[label] += 1;
+    if (l_filter_s < 1) l1_filter_tot[label] += 1;
+    if (l_s < 1) l1_tot[label] += 1;
+   
 	lastHead++;
     printf("l_filter_s: %d\n", l_filter_s);
-	printf("%f %f %f %f\n", l_tot[0] / lastHead, l_filter_tot[0] / lastHead, l_rank[0], l_filter_rank[0]);
+	printf("%f %f %f %f\n", l10_tot[0] / lastHead, l10_filter_tot[0] / lastHead, l_rank[0], l_filter_rank[0]);
 }
 
 extern "C"
@@ -321,7 +337,7 @@ void testTail(float *con) {
     int r_filter_s_constrain = 0;
     int type_tail = tail_lef[r];
 
-    for (int j = 0; j <= entityTotal; j++) {
+    for (int j = 0; j < entityTotal; j++) {
         float value = con[j];
         if (j != t && value < minimal) {
             r_s += 1;
@@ -340,47 +356,54 @@ void testTail(float *con) {
         }
     }
 
-	if (r_filter_s < 10) r_filter_tot[0] += 1;
-	if (r_s < 10) r_tot[0] += 1;
-    if (r_filter_s < 3) r3_filter_tot += 1;
-    if (r_s < 3) r3_tot += 1;
-    if (r_filter_s < 1) r1_filter_tot += 1;
-    if (r_s < 1) r1_tot += 1;
-
-    if (r_filter_s < 10) r_filter_tot[label] += 1;
-    if (r_s < 10) r_tot[label] += 1;
-
     r_filter_rank[label] += r_filter_s;
     r_rank[label] += r_s;
-
-    if (r_filter_s_constrain < 10) r_filter_tot[5] += 1;
-    if (r_s_constrain < 10) r_tot[5] += 1;
-
     r_filter_rank[5] += r_filter_s_constrain;
     r_rank[5] += r_s_constrain;
-
 	r_filter_rank[0] += (1+r_filter_s);
 	r_rank[0] += (1+r_s);
+
+	if (r_filter_s < 10) r10_filter_tot[0] += 1;
+	if (r_s < 10) r10_tot[0] += 1;
+    if (r_filter_s < 3) r3_filter_tot[0] += 1;
+    if (r_s < 3) r3_tot[0] += 1;
+    if (r_filter_s < 1) r1_filter_tot[0] += 1;
+    if (r_s < 1) r1_tot[0] += 1;
+
+    if (r_filter_s_constrain < 10) r10_filter_tot[5] += 1;
+    if (r_s_constrain < 10) r10_tot[5] += 1;
+    if (r_filter_s_constrain < 3) r3_filter_tot[5] += 1;
+    if (r_s_constrain < 3) r3_tot[5] += 1;
+    if (r_filter_s_constrain < 1) r1_filter_tot[5] += 1;
+    if (r_s_constrain < 1) r1_tot[5] += 1;
+
+    if (r_filter_s < 10) r10_filter_tot[label] += 1;
+    if (r_s < 10) r10_tot[label] += 1;
+    if (r_filter_s < 3) r3_filter_tot[label] += 1;
+    if (r_s < 3) r3_tot[label] += 1;
+    if (r_filter_s < 1) r1_filter_tot[label] += 1;
+    if (r_s < 1) r1_tot[label] += 1;
+
 	lastTail++;
     printf("r_filter_s: %d\n", r_filter_s);
-	printf("%f %f %f %f\n", r_tot[0] /lastTail, r_filter_tot[0] /lastTail, r_rank[0], r_filter_rank[0]);
+	printf("%f %f %f %f\n", r10_tot[0] /lastTail, r10_filter_tot[0] /lastTail, r_rank[0], r_filter_rank[0]);
 }
 
 extern "C"
 void test() {
     printf("results:\n");
     for (int i = 0; i <=0; i++) {
-    	printf("left %f %f %f %f \n", l_rank[i]/ testTotal, l_tot[i] / testTotal, l3_tot / testTotal, l1_tot / testTotal);
-        printf("left(filter) %f %f %f %f \n", l_filter_rank[i]/ testTotal, l_filter_tot[i] / testTotal,  l3_filter_tot / testTotal,  l1_filter_tot / testTotal);
-        printf("right %f %f %f %f \n", r_rank[i]/ testTotal, r_tot[i] / testTotal,r3_tot / testTotal,r1_tot / testTotal);
-        printf("right(filter) %f %f %f %f\n", r_filter_rank[i]/ testTotal, r_filter_tot[i] / testTotal,r3_filter_tot / testTotal,r1_filter_tot / testTotal);
+    	printf("left %f %f %f %f \n", l_rank[i] / testTotal, l10_tot[i] / testTotal, l3_tot[i] / testTotal, l1_tot[i] / testTotal);
+        printf("left(filter) %f %f %f %f \n", l_filter_rank[i] / testTotal, l10_filter_tot[i] / testTotal, l3_filter_tot[i] / testTotal, l1_filter_tot[i] / testTotal);
+        printf("right %f %f %f %f \n", r_rank[i] / testTotal, r10_tot[i] / testTotal, r3_tot[i] / testTotal, r1_tot[i] / testTotal);
+        printf("right(filter) %f %f %f %f\n", r_filter_rank[i] / testTotal, r10_filter_tot[i] / testTotal, r3_filter_tot[i] / testTotal, r1_filter_tot[i] / testTotal);
     }
     printf("results (type constraints):\n");
     for (int i = 5; i <=5; i++) {
-        printf("left %f %f %f %f \n", l_rank[i]/ testTotal, l_tot[i] / testTotal, l3_tot / testTotal, l1_tot / testTotal);
-        printf("left(filter) %f %f %f %f \n", l_filter_rank[i]/ testTotal, l_filter_tot[i] / testTotal,  l3_filter_tot / testTotal,  l1_filter_tot / testTotal);
-        printf("right %f %f %f %f \n", r_rank[i]/ testTotal, r_tot[i] / testTotal,r3_tot / testTotal,r1_tot / testTotal);
-        printf("right(filter) %f %f %f %f\n", r_filter_rank[i]/ testTotal, r_filter_tot[i] / testTotal,r3_filter_tot / testTotal,r1_filter_tot / testTotal);
+        printf("left %f %f %f %f \n", l_rank[i] / testTotal, l10_tot[i] / testTotal, l3_tot[i] / testTotal, l1_tot[i] / testTotal);
+        printf("left(filter) %f %f %f %f \n", l_filter_rank[i] / testTotal, l10_filter_tot[i] / testTotal, l3_filter_tot[i] / testTotal, l1_filter_tot[i] / testTotal);
+        printf("right %f %f %f %f \n", r_rank[i] / testTotal, r10_tot[i] / testTotal, r3_tot[i] / testTotal, r1_tot[i] / testTotal);
+        printf("right(filter) %f %f %f %f\n", r_filter_rank[i] / testTotal, r10_filter_tot[i] / testTotal, r3_filter_tot[i] / testTotal, r1_filter_tot[i] / testTotal);
     }
     for (int i = 1; i <= 4; i++) {
         if (i == 1)
@@ -391,10 +414,10 @@ void test() {
             printf("results (n-1):\n");
         if (i == 4)
             printf("results (n-n):\n");
-        printf("left %f %f %f %f \n", l_rank[i]/ nntotal[i], l_tot[i] / nntotal[i], l3_tot / nntotal[i], l1_tot / nntotal[i]);
-        printf("left(filter) %f %f %f %f \n", l_filter_rank[i]/ nntotal[i], l_filter_tot[i] / nntotal[i],  l3_filter_tot / nntotal[i],  l1_filter_tot / nntotal[i]);
-        printf("right %f %f %f %f \n", r_rank[i]/ nntotal[i], r_tot[i] / nntotal[i],r3_tot / nntotal[i],r1_tot / nntotal[i]);
-        printf("right(filter) %f %f %f %f\n", r_filter_rank[i]/ nntotal[i], r_filter_tot[i] / nntotal[i],r3_filter_tot / nntotal[i],r1_filter_tot / nntotal[i]);
+        printf("left %f %f %f %f \n", l_rank[i] / nntotal[i], l10_tot[i] / nntotal[i], l3_tot[i] / nntotal[i], l1_tot[i] / nntotal[i]);
+        printf("left(filter) %f %f %f %f \n", l_filter_rank[i] / nntotal[i], l10_filter_tot[i] / nntotal[i], l3_filter_tot[i] / nntotal[i], l1_filter_tot[i] / nntotal[i]);
+        printf("right %f %f %f %f \n", r_rank[i] / nntotal[i], r10_tot[i] / nntotal[i], r3_tot[i] / nntotal[i], r1_tot[i] / nntotal[i]);
+        printf("right(filter) %f %f %f %f\n", r_filter_rank[i] / nntotal[i], r10_filter_tot[i] / nntotal[i], r3_filter_tot[i] / nntotal[i], r1_filter_tot[i] / nntotal[i]);
     }
 }
 
