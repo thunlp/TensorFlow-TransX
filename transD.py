@@ -16,6 +16,7 @@ class Config(object):
 		lib.setInPath("./data/FB15K/")
 		test_lib.setInPath("./data/FB15K/")
 		lib.setBernFlag(0)
+		self.learning_rate = 0.001
 		self.testFlag = False
 		self.loadFromData = False
 		self.L1_flag = True
@@ -29,7 +30,7 @@ class Config(object):
 class TransDModel(object):
 
 	def calc(self, e, t, r):
-		return e + tf.reduce_sum(e * t, 1, keep_dims = True) * r
+		return tf.nn.l2_normalize(e + tf.reduce_sum(e * t, 1, keep_dims = True) * r, 1)
 
 	def __init__(self, config):
 
@@ -106,7 +107,7 @@ def main(_):
 				trainModel = TransDModel(config = config)
 
 			global_step = tf.Variable(0, name="global_step", trainable=False)
-			optimizer = tf.train.GradientDescentOptimizer(0.001)
+			optimizer = tf.train.GradientDescentOptimizer(config.learning_rate)
 			grads_and_vars = optimizer.compute_gradients(trainModel.loss)
 			train_op = optimizer.apply_gradients(grads_and_vars, global_step=global_step)
 			saver = tf.train.Saver()

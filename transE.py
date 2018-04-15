@@ -16,6 +16,7 @@ class Config(object):
 		lib.setInPath("./data/FB15K/")
 		test_lib.setInPath("./data/FB15K/")
 		lib.setBernFlag(0)
+		self.learning_rate = 0.001
 		self.testFlag = False
 		self.loadFromData = False
 		self.L1_flag = True
@@ -66,6 +67,7 @@ class TransEModel(object):
 		with tf.name_scope("output"):
 			self.loss = tf.reduce_sum(tf.maximum(pos - neg + margin, 0))
 
+
 def main(_):
 	config = Config()
 	if (config.testFlag):
@@ -88,7 +90,7 @@ def main(_):
 				trainModel = TransEModel(config = config)
 
 			global_step = tf.Variable(0, name="global_step", trainable=False)
-			optimizer = tf.train.GradientDescentOptimizer(0.001)
+			optimizer = tf.train.GradientDescentOptimizer(config.learning_rate)
 			grads_and_vars = optimizer.compute_gradients(trainModel.loss)
 			train_op = optimizer.apply_gradients(grads_and_vars, global_step=global_step)
 			saver = tf.train.Saver()
