@@ -13,8 +13,9 @@ test_lib = ll("./test.so")
 class Config(object):
 
 	def __init__(self):
-		lib.setInPath("./data/FB15K/")
-		test_lib.setInPath("./data/FB15K/")
+		path = "./data/FB15K/"
+                lib.setInPath(path, len(path))
+                test_lib.setInPath(path, len(path))
 		lib.setBernFlag(0)
 		self.learning_rate = 0.0001
 		self.testFlag = False
