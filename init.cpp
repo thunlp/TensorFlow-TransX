@@ -12,12 +12,12 @@ string inPath = "./data/";
 int bernFlag = 0;
 
 extern "C"
-void setInPath(char *path) {
-    int len = strlen(path);
+void setInPath(char *path, int len) {
     inPath = "";
-    for (int i = 0; i < len; i++)
+    printf("init path...\n");
+    for (int i = 0; i < len; i++){
         inPath = inPath + path[i];
-    printf("Input Files Path : %s\n", inPath.c_str());
+    }
 }
 
 int *lefHead, *rigHead;
