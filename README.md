@@ -1,5 +1,15 @@
 # TensorFlow-TransX
 
+This repository is a subproject of THU-OpenSK, and all subprojects of THU-OpenSK are as follows.
+
+- [OpenNE](https://www.github.com/thunlp/OpenNE)
+- [OpenKE](https://www.github.com/thunlp/OpenKE)
+  - [KB2E](https://www.github.com/thunlp/KB2E)
+  - [TensorFlow-Transx](https://www.github.com/thunlp/TensorFlow-Transx)
+  - [Fast-TransX](https://www.github.com/thunlp/Fast-TransX)
+- [OpenNRE](https://www.github.com/thunlp/OpenNRE)
+  - [JointNRE](https://www.github.com/thunlp/JointNRE)
+
 The implementation of TransE [1], TransH [2], TransR [3], TransD [4] for knowledge representation learning (KRL). The overall framework is based on TensorFlow. We use C++ to implement some underlying operations such as data preprocessing and negative sampling. For each specific model, it is implemented by TensorFlow with Python interfaces so that there is a convenient platform to run models on GPUs. 
 
 These codes will be gradually integrated into the new framework [[OpenKE]](https://github.com/thunlp/openke).
@@ -35,7 +45,7 @@ To train models based on random initialization:
 1. Change class Config in transX.py
 
 		class Config(object):
-	
+		
 			def __init__(self):
 				...
 				lib.setInPath("your training data path...")
@@ -50,7 +60,7 @@ To train models based on pretrained results:
 1. Change class Config in transX.py
 
 		class Config(object):
-	
+		
 			def __init__(self):
 				...
 				lib.setInPath("your training data path...")
@@ -67,7 +77,7 @@ To test your models:
 1. Change class Config in transX.py
 	
 		class Config(object):
-
+		
 			def __init__(self):
 				...
 				test_lib.setInPath("your testing data path...")
